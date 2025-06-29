@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deteksi Hoaks Media Sosial</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f3f6f8;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 750px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+      label {
+        margin-top: 15px;
+        display: block;
+        font-weight: bold;
+      }
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        font-size: 1em;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        background-color: #2980b9;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        font-size: 1em;
+        width: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        padding: 15px;
+        border-radius: 5px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+        Detektor Hoaks Cerdas Dengan Menggunakan Metode Logika Proposisi Pada
+        Media Sosial
+      </h1>
+
+      <label for="konten">Masukkan isi berita atau postingan:</label>
+      <textarea
+        id="konten"
+        placeholder="Contoh: Vaksin bisa mengandung chip pelacak..."
+        required
+      ></textarea>
+
+      <label>Sumber informasi:</label>
+      <select id="sumber">
+        <option value="resmi">Media Resmi / Terverifikasi</option>
+        <option value="netizen">Akun Netizen Tidak Dikenal</option>
+        <option value="grup">Pesan berantai / Grup WA</option>
+      </select>
+
+      <label>Ada bukti atau referensi valid?</label>
+      <select id="bukti">
+        <option value="ya">Ada</option>
+        <option value="tidak">Tidak Ada</option>
+      </select>
+
+      <label>Gaya Bahasa:</label>
+      <select id="bahasa">
+        <option value="netral">Netral / Informasi Objektif</option>
+        <option value="provokatif">Provokatif / Emosional</option>
+      </select>
+
+      <button onclick="deteksiHoaks()">🔍 Deteksi Sekarang</button>
+
+      <div class="result" id="hasil"></div>
+    </div>
+
+    <script>
+      const databaseHoaks = [
+        "vaksin menyebabkan magnet",
+        "chip dalam vaksin",
+        "5g penyebab corona",
+        "bumi itu datar",
+        "dokter dibayar untuk menutupi",
+        "pemilu akan dibatalkan",
+        "makanan halal mengandung babi",
+      ];
+
+      function deteksiHoaks() {
+        const input = document.getElementById("konten").value.toLowerCase();
+        const sumber = document.getElementById("sumber").value;
+        const bukti = document.getElementById("bukti").value;
+        const bahasa = document.getElementById("bahasa").value;
+        const hasil = document.getElementById("hasil");
+
+        let skor = 0;
+
+        // 1. Logika proposisi berbobot
+        if (sumber === "netizen" || sumber === "grup") skor += 2;
+        if (bukti === "tidak") skor += 2;
+        if (bahasa === "provokatif") skor += 1;
+
+        // 2. Cek apakah mengandung frasa hoaks populer
+        for (let frasa of databaseHoaks) {
+          if (input.includes(frasa)) {
+            skor += 3;
+            break;
+          }
+        }
+
+        // 3. Evaluasi hasil
+        let pesan = "";
+        if (skor >= 6) {
+          pesan =
+            "<span style='color:red;'>⚠️ Konten ini kemungkinan besar HOAKS.</span><br>Skor: " +
+            skor;
+          hasil.style.background = "#ffe6e6";
+        } else if (skor >= 4) {
+          pesan =
+            "<span style='color:orange;'>⚠️ Konten ini berpotensi hoaks, periksa lebih lanjut.</span><br>Skor: " +
+            skor;
+          hasil.style.background = "#fff4e6";
+        } else {
+          pesan =
+            "<span style='color:green;'>✅ Konten ini tidak terindikasi hoaks.</span><br>Skor: " +
+            skor;
+          hasil.style.background = "#e6ffe6";
+        }
+
+        hasil.innerHTML = pesan;
+      }
+    </script>
+  </body>
+</html>
+>
